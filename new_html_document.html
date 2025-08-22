@@ -1,60 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Conversion Rate Calculator</title>
   <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:0; }
-    .calc-box {
-      max-width:400px;
-      padding:20px;
-      border:1px solid #ccc;
-      border-radius:10px;
-      margin:auto;
+    :root {
+      --brand: #ed8102;
+      --brand-hover: #cf6f00;
+      --text: #333;
+      --border: #ddd;
+      --radius: 12px;
     }
-    h3 { margin-top:0; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background: #fff;
+      height: 100%;
+    }
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .calc-box {
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-sizing: border-box;
+    }
+    h3 { margin: 0 0 12px; }
+    label { font-size: 14px; }
     input {
-      width:100%; padding:8px; margin:6px 0;
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
     }
     button {
-      width:100%; padding:10px;
-      background:#ed8102; color:#fff;
-      border:none; border-radius:5px;
-      cursor:pointer; font-weight:bold;
+      width: 100%;
+      padding: 12px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
     }
-    button:hover {
-      background:#cf6f00;
-    }
-    #result { margin-top:15px; font-weight:bold; }
+    button:hover { background: var(--brand-hover); }
+    #result { margin-top: 14px; font-weight: bold; }
+    .tip { font-size: 12px; opacity: .75; margin-top: 6px; }
   </style>
 </head>
 <body>
-  <div class="calc-box">
-    <h3>Conversion Rate Calculator</h3>
-    <label for="visitors">Total Visitors:</label><br>
-    <input type="number" id="visitors" placeholder="Enter visitors"><br>
+  <div class="wrap">
+    <div class="calc-box">
+      <h3>Conversion Rate Calculator</h3>
 
-    <label for="conversions">Total Conversions:</label><br>
-    <input type="number" id="conversions" placeholder="Enter conversions"><br>
+      <label for="visitors">Total Visitors</label>
+      <input type="number" id="visitors" placeholder="e.g., 5,000" inputmode="numeric"/>
 
-    <button onclick="calculateRate()">Calculate</button>
-    <p id="result"></p>
+      <label for="conversions">Total Conversions</label>
+      <input type="number" id="conversions" placeholder="e.g., 125" inputmode="numeric"/>
+
+      <button id="calcBtn" type="button">Calculate</button>
+      <p id="result"></p>
+      <div class="tip">Formula: conversions ÷ visitors × 100</div>
+    </div>
   </div>
 
   <script>
     function calculateRate() {
-      const visitors = document.getElementById("visitors").value;
-      const conversions = document.getElementById("conversions").value;
+      const visitors = parseFloat(document.getElementById("visitors").value);
+      const conversions = parseFloat(document.getElementById("conversions").value);
       const result = document.getElementById("result");
 
-      if (visitors > 0 && conversions >= 0) {
+      if (Number.isFinite(visitors) && visitors > 0 && Number.isFinite(conversions) && conversions >= 0) {
         const rate = (conversions / visitors) * 100;
         result.textContent = "Conversion Rate: " + rate.toFixed(2) + "%";
       } else {
         result.textContent = "Please enter valid numbers.";
       }
+      resizeFrame();
     }
+
+    document.getElementById("calcBtn").addEventListener("click", calculateRate);
+
+    // Auto-resize the iframe height in the parent page
+    function resizeFrame() {
+      try {
+        const height = document.documentElement.scrollHeight;
+        window.parent.postMessage({ type: "resize", height }, "*");
+      } catch(e) {}
+    }
+    window.addEventListener("load", resizeFrame);
+    window.addEventListener("resize", resizeFrame);
+    // Small mutation observer to handle layout changes
+    const mo = new MutationObserver(resizeFrame);
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true });
   </script>
 </body>
 </html>
