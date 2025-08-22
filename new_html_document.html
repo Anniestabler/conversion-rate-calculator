@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversion Rate Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    .calc-box {
+      max-width:400px;
+      padding:20px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      margin:auto;
+    }
+    h3 { margin-top:0; }
+    input {
+      width:100%; padding:8px; margin:6px 0;
+    }
+    button {
+      width:100%; padding:10px;
+      background:#ed8102; color:#fff;
+      border:none; border-radius:5px;
+      cursor:pointer; font-weight:bold;
+    }
+    button:hover {
+      background:#cf6f00;
+    }
+    #result { margin-top:15px; font-weight:bold; }
+  </style>
+</head>
+<body>
+  <div class="calc-box">
+    <h3>Conversion Rate Calculator</h3>
+    <label for="visitors">Total Visitors:</label><br>
+    <input type="number" id="visitors" placeholder="Enter visitors"><br>
+
+    <label for="conversions">Total Conversions:</label><br>
+    <input type="number" id="conversions" placeholder="Enter conversions"><br>
+
+    <button onclick="calculateRate()">Calculate</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function calculateRate() {
+      const visitors = document.getElementById("visitors").value;
+      const conversions = document.getElementById("conversions").value;
+      const result = document.getElementById("result");
+
+      if (visitors > 0 && conversions >= 0) {
+        const rate = (conversions / visitors) * 100;
+        result.textContent = "Conversion Rate: " + rate.toFixed(2) + "%";
+      } else {
+        result.textContent = "Please enter valid numbers.";
+      }
+    }
+  </script>
+</body>
+</html>
