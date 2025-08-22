@@ -5,74 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Conversion Rate Calculator</title>
   <style>
-    :root {
-      --brand: #ed8102;
-      --brand-hover: #cf6f00;
-      --text: #333;
-      --border: #ddd;
-      --radius: 12px;
-    }
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      color: var(--text);
-      background: #fff;
-      height: 100%;
-    }
-    .wrap {
-      min-height: 100%;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      box-sizing: border-box;
-    }
-    .calc-box {
-      width: 100%;
-      max-width: 420px;
-      padding: 20px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-sizing: border-box;
-    }
-    h3 { margin: 0 0 12px; }
-    label { font-size: 14px; }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-sizing: border-box;
-      font-size: 14px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: var(--brand);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 15px;
-    }
-    button:hover { background: var(--brand-hover); }
-    #result { margin-top: 14px; font-weight: bold; }
-    .tip { font-size: 12px; opacity: .75; margin-top: 6px; }
+    :root { --brand:#ed8102; --brand-hover:#cf6f00; --text:#333; --border:#ddd; --radius:12px; }
+    html,body{margin:0;padding:0;font-family:Arial, sans-serif;color:var(--text);background:#fff;}
+    .wrap{min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box;}
+    .calc-box{width:100%;max-width:420px;padding:20px;border:1px solid var(--border);border-radius:var(--radius);box-sizing:border-box;}
+    h3{margin:0 0 12px;}
+    label{font-size:14px;}
+    input{width:100%;padding:10px;margin:6px 0 12px;border:1px solid var(--border);border-radius:8px;box-sizing:border-box;font-size:14px;}
+    button{width:100%;padding:12px;background:var(--brand);color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:bold;font-size:15px;}
+    button:hover{background:var(--brand-hover);}
+    #result{margin-top:14px;font-weight:bold;}
+    .tip{font-size:12px;opacity:.75;margin-top:6px;}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="calc-box">
       <h3>Conversion Rate Calculator</h3>
-
       <label for="visitors">Total Visitors</label>
       <input type="number" id="visitors" placeholder="e.g., 5,000" inputmode="numeric"/>
-
       <label for="conversions">Total Conversions</label>
       <input type="number" id="conversions" placeholder="e.g., 125" inputmode="numeric"/>
-
       <button id="calcBtn" type="button">Calculate</button>
       <p id="result"></p>
       <div class="tip">Formula: conversions ÷ visitors × 100</div>
@@ -84,7 +37,6 @@
       const visitors = parseFloat(document.getElementById("visitors").value);
       const conversions = parseFloat(document.getElementById("conversions").value);
       const result = document.getElementById("result");
-
       if (Number.isFinite(visitors) && visitors > 0 && Number.isFinite(conversions) && conversions >= 0) {
         const rate = (conversions / visitors) * 100;
         result.textContent = "Conversion Rate: " + rate.toFixed(2) + "%";
@@ -93,10 +45,9 @@
       }
       resizeFrame();
     }
-
     document.getElementById("calcBtn").addEventListener("click", calculateRate);
 
-    // Auto-resize the iframe height in the parent page
+    // Auto-resize the parent iframe (safe no-op if opened directly)
     function resizeFrame() {
       try {
         const height = document.documentElement.scrollHeight;
@@ -105,9 +56,7 @@
     }
     window.addEventListener("load", resizeFrame);
     window.addEventListener("resize", resizeFrame);
-    // Small mutation observer to handle layout changes
-    const mo = new MutationObserver(resizeFrame);
-    mo.observe(document.body, { childList: true, subtree: true, attributes: true });
+    new MutationObserver(resizeFrame).observe(document.body, { childList:true, subtree:true, attributes:true });
   </script>
 </body>
 </html>
